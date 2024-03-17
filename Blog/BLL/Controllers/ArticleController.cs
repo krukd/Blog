@@ -22,7 +22,7 @@ namespace Blog.BLL.Controllers
 
             var newArticle = new Article
             {
-                Title = "New Article 1",
+                Title = "New Article 2",
                 Content = "This is a new article content.",
                 PublishedDate = DateTime.Now,
                 UserId = 2 
