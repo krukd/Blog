@@ -63,29 +63,9 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //[Route("Users")]
-        //public IActionResult Index()
-        //{
-        //    var users = _repo.GetAll();
-        //    return View(users);
-        //}
+        
 
 
-        [Route("Users")]
-        public async Task<IActionResult> Index()
-        {
-            var users = await _repo.GetAll();
-            return View(users);
-        }
-
-
-        [HttpGet]
-        [Route("Users/{id}")]
-        public async Task<IActionResult> Index_2(int id)
-        {
-            var user = await _repo.Get(id);
-
-            return View(user);
-        }
+        
     }
 }
