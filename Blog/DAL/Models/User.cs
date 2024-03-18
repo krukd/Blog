@@ -12,7 +12,12 @@ namespace Blog.DAL.Models
         public string Email { get; set; }
         public string Password { get; set; }
 
-       
-        
+        public int RoleId { get; set; }
+
+        [ForeignKey("UserId")]
+        public List<Role> Roles { get; set; } = new List<Role>();
+
+
+
     }
 }

@@ -20,28 +20,31 @@ namespace Blog.BLL.Controllers
             _repo = repo;
         }
 
-       
+        [HttpGet]
         [Route("Register")]
         public async Task<IActionResult> Register()
         {
 
-            var newUser = new User
-            {
-                FirstName = "Test2",
-                LastName = "T2",
-                Email = "Test1@test.com",
-                Password = "123",
-            };
+            //var newUser = new User
+            //{
+            //    FirstName = "Dima",
+            //    LastName = "Smirnov",
+            //    Email = "test3@test.com",
+            //    Password = "123",
+            //    RoleId = 3,
+            //};
 
-            _repo.Add(newUser);
+            //_repo.Add(newUser);
 
 
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
+
+            return View();
         }
 
         // DELETE: User/Delete/1
        
-        [Route("Delete/{id}")]
+        [Route("User/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var user = await _repo.Get(id);
@@ -54,7 +57,7 @@ namespace Blog.BLL.Controllers
         }
 
        
-        [Route("Update/{id}")]
+        [Route("User/Update/{id}")]
         public async Task<IActionResult> Update(int id)
         {
             var user = await _repo.Get(id);
@@ -68,12 +71,7 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //[Route("Users")]
-        //public IActionResult Index()
-        //{
-        //    var users = _repo.GetAll();
-        //    return View(users);
-        //}
+        
 
 
         [Route("Users")]

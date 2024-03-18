@@ -1,0 +1,18 @@
+﻿<h1>Tags List</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Content</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tag in Model)
+        {
+            <tr>
+                <td>@tag.Content</td>
+                
+            </tr>
+        }
+    </tbody>
+</table>

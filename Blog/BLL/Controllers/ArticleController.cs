@@ -22,7 +22,7 @@ namespace Blog.BLL.Controllers
 
             var newArticle = new Article
             {
-                Title = "New Article 2",
+                Title = "New Article 3",
                 Content = "This is a new article content.",
                 PublishedDate = DateTime.Now,
                 UserId = 2 
@@ -34,7 +34,7 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        // DELETE: User/Delete/1
+       
 
         [Route("Article/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -63,9 +63,26 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        
+        [Route("Articles")]
+        public async Task<IActionResult> Index()
+        {
+            var articles = await _repo.GetAll();
+            return View(articles);
+        }
 
 
-        
+        [HttpGet]
+        [Route("Articles/{id}")]
+        public async Task<IActionResult> Index_2(int id)
+        {
+            var article = await _repo.Get(id);
+
+            return View(article);
+        }
+
+
+
+
+
     }
 }

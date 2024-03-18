@@ -17,12 +17,16 @@ namespace Blog
 
             builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")))
-            .AddUnitOfWork();
-            
+            .AddUnitOfWork()
+            .AddCustomRepository<Comment, CommentRepository>()
+            .AddCustomRepository<Role, RoleRepository>();
+
+
 
             builder.Services
             .AddTransient<IUserRepository, UserRepository>()
-             .AddTransient<IArticleRepository, ArticleRepository>();
+             .AddTransient<IArticleRepository, ArticleRepository>()
+             .AddCustomRepository<Tag, TagRepository>();
 
 
             // Add services to the container.
