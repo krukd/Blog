@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using Blog.Extensions;
 using System.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Blog
 {
@@ -28,6 +29,20 @@ namespace Blog
              .AddTransient<IArticleRepository, ArticleRepository>()
              .AddCustomRepository<Tag, TagRepository>();
 
+            builder.Services.AddHttpContextAccessor();
+
+            // Добавляем аутентификацию
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.HttpOnly = true;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Время жизни куки
+                    options.LoginPath = "/Login"; // Путь для перенаправления на страницу входа
+                    options.AccessDeniedPath = "/AccessDenied"; // Путь для перенаправления на страницу доступа запрещен
+                    options.SlidingExpiration = true; // Обновлять время жизни куки при каждом запросе
+                });
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -46,6 +61,8 @@ namespace Blog
             app.UseStaticFiles();
 
             app.UseRouting();
+
+
 
             app.UseAuthorization();
 

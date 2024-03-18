@@ -16,6 +16,9 @@ namespace Blog.BLL.Controllers
             _logger = logger;
         }
 
+
+
+        [AdminAuthorization]
         [Route("Article/Create")]
         public async Task<IActionResult> CreateArticle()
         {

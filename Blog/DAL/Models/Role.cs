@@ -8,7 +8,7 @@ namespace Blog.DAL.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        [ForeignKey("RoleId")]
+        [ForeignKey("Role_Id")]
         public List<User> Users { get; set; } = new List<User>();
     }
 }

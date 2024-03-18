@@ -23,8 +23,12 @@ namespace Blog.BLL.Controllers
 
             var newRole = new Role
             {
-                Name = "Пользователь",
-                Description = "Blog's user"
+                //Name = "Администратор",
+                //Description = "Blog's administrator"
+                //Name = "Модератор",
+                //Description = "Blog's moderator"
+                //Name = "Пользователь",
+                //Description = "Blog's user"
             };
 
             _repo.Add(newRole);

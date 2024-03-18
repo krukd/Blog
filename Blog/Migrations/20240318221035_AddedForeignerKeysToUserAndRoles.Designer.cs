@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240318110354_DBUpdated")]
-    partial class DBUpdated
+    [Migration("20240318221035_AddedForeignerKeysToUserAndRoles")]
+    partial class AddedForeignerKeysToUserAndRoles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,15 +156,15 @@ namespace Blog.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.Property<int>("RoleId")
+                    b.Property<int>("Role_Id")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("User_Id")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("RoleId", "UserId");
+                    b.HasKey("Role_Id", "User_Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("User_Id");
 
                     b.ToTable("RoleUser");
                 });
@@ -216,13 +216,13 @@ namespace Blog.Migrations
                 {
                     b.HasOne("Blog.DAL.Models.Role", null)
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("Role_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Blog.DAL.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("User_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
