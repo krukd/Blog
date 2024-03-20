@@ -7,7 +7,12 @@
 <h3 class="center">Редактирование пользователя</h3>
 
 <form method="post" asp-controller="User" asp-action="Update">
-    <input type="hidden" asp-for="Id" asp-for="Email" />
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="Email" />
+   @*  @if (ViewData["Email"] != null)
+    {
+        <input type="hidden" asp-for="Email" value="@ViewData["Email"]" />
+    } *@
     <div class="mb-3">
         <label>First Name</label>
         <input asp-for="FirstName" class="form-control" placeholder="Дмитрий" required>

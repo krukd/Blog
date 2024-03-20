@@ -34,10 +34,10 @@ namespace Blog.DAL.Data.Repositories
             return await Set.ToListAsync();
         }
 
-        public User GetByLogin(string login)
+        public User GetByLogin(string email)
         {
             //return Set.FirstOrDefault(x => (x as User).Email == login) as User;
-            return Set.FirstOrDefault(x => x.Email == login);
+            return Set.FirstOrDefault(x => x.Email == email);
         }
 
         public async Task Delete(User item)

@@ -117,7 +117,7 @@ namespace Blog.BLL.Controllers
 
                 await _repo.Add(newUser);
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("MyPage", "User");
 
             }
             foreach (var modelState in ModelState.Values)
@@ -166,6 +166,17 @@ namespace Blog.BLL.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var user = await _repo.Get(id);
+
+            //if (user != null)
+            //{
+            //    ViewData["Email"] = user.Email;
+            //    return View(user);
+            //}
+            //else
+            //{
+            //    // Обработка случая, когда пользователь не найден
+            //    return NotFound(); // Или какая-то другая обработка ошибки
+            //}
             return View(user);
         }
 

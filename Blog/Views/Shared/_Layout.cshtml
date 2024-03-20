@@ -34,7 +34,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Update">Update</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Update" asp-route-id="@Model.Id">Update</a>
                             </li>
                         }
                         else
