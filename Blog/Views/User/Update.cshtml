@@ -1,11 +1,13 @@
 ﻿@model Blog.DAL.Models.User
 
 @{
-    ViewData["Title"] = "Регистрация";
+    ViewData["Title"] = "Редактирование пользователя";
 }
 
-<h3 class="center">Регистрация пользователя</h3>
-<form method="post" asp-controller="User" asp-action="Register">
+<h3 class="center">Редактирование пользователя</h3>
+
+<form method="post" asp-controller="User" asp-action="Update">
+    <input type="hidden" asp-for="Id" asp-for="Email" />
     <div class="mb-3">
         <label>First Name</label>
         <input asp-for="FirstName" class="form-control" placeholder="Дмитрий" required>
@@ -16,18 +18,12 @@
         <input asp-for="LastName" class="form-control" placeholder="Петров" required>
         <div id="lastNameHelp" class="form-text">Please enter your last name.</div>
     </div>
-    <div class="mb-3">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" placeholder="электронная почта" required>
-        <span asp-validation-for="Email" class="text-danger"></span>
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
+   
     <div class="mb-3">
         <label>Password</label>
         <input asp-for="Password" class="form-control" placeholder="придумайте надежный пароль" required>
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
-    
+
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-

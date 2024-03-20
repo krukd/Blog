@@ -25,7 +25,7 @@ namespace Blog.DAL.Data.Repositories
 
         public async Task<T> Get(int id)
         {
-            
+
             return await Set.FindAsync(id);
         }
 
@@ -34,7 +34,7 @@ namespace Blog.DAL.Data.Repositories
             return await Set.ToListAsync();
         }
 
-        
+
         public async Task Delete(T item)
         {
             Set.Remove(item);
@@ -60,6 +60,6 @@ namespace Blog.DAL.Data.Repositories
             return item.GetType().GetProperty(key.Name).GetValue(item);
         }
 
-        
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Blog.DAL.Data.Repositories;
 using Blog.DAL.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.BLL.Controllers
@@ -17,6 +18,7 @@ namespace Blog.BLL.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [Route("Role/Create")]
         public async Task<IActionResult> CreateRole()
         {
@@ -38,7 +40,7 @@ namespace Blog.BLL.Controllers
         }
 
 
-
+        [Authorize]
         [Route("Role/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -51,7 +53,7 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
+        [Authorize]
         [Route("Role/Update/{id}")]
         public async Task<IActionResult> Update(int id)
         {
@@ -64,6 +66,8 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        [Authorize]
         [Route("Roles")]
         public async Task<IActionResult> Index()
         {
@@ -71,7 +75,7 @@ namespace Blog.BLL.Controllers
             return View(roles);
         }
 
-
+        [Authorize]
         [HttpGet]
         [Route("Roles/{id}")]
         public async Task<IActionResult> Index_2(int id)

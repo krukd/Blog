@@ -28,6 +28,17 @@ namespace Blog.BLL.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [Authorize]
+        [Route("MyPage")]
+        public IActionResult MyPage()
+        {
+            // Получаем текущего аутентифицированного пользователя
+            var user = _repo.GetByLogin(User.Identity.Name); 
+
+            // Возвращаем представление 
+            return View(user);
+        }
+
 
         [Route("Login")]
         [HttpGet]
@@ -40,6 +51,10 @@ namespace Blog.BLL.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+
+            if (String.IsNullOrEmpty(email) || String.IsNullOrEmpty(password))
+                throw new ArgumentNullException("Incorrect credentials");
+
             var user = _repo.GetByLogin(email);
             if (user != null)
             {
@@ -62,8 +77,9 @@ namespace Blog.BLL.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
+                
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("MyPage", "User");
             }
             else
             {
@@ -72,8 +88,8 @@ namespace Blog.BLL.Controllers
             }
         }
 
-        [Route("Logout")]
-        [HttpPost]
+        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -89,6 +105,7 @@ namespace Blog.BLL.Controllers
 
 
         [Route("Register")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Register([Bind("Id,FirstName,LastName,Email,Password")] User newUser)
         {
@@ -100,7 +117,7 @@ namespace Blog.BLL.Controllers
 
                 await _repo.Add(newUser);
 
-                return View(newUser);
+                return RedirectToAction("Index", "Home");
 
             }
             foreach (var modelState in ModelState.Values)
@@ -129,7 +146,8 @@ namespace Blog.BLL.Controllers
         }
 
         // DELETE: User/Delete/1
-
+        [AdminAuthorization]
+        [Authorize]
         [Route("User/Delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -142,24 +160,30 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
-        [Route("User/Update/{id}")]
+        [Authorize]
+        [Route("User/Update")]
+        [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
             var user = await _repo.Get(id);
-            user.FirstName = "John";
-            user.LastName = "Puprkin";
-            user.Email = "email@mail.ru";
-            user.Password = "123456";
+            return View(user);
+        }
 
+        [Authorize]
+        [Route("User/Update")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update([Bind("Id,FirstName,LastName,Email,Password")] User user)
+        {
+            
             await _repo.Update(user);
-
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
+           return RedirectToAction("MyPage", "User");
         }
 
 
 
-
+        [Authorize]
         [Route("Users")]
         public async Task<IActionResult> Index()
         {
@@ -167,7 +191,7 @@ namespace Blog.BLL.Controllers
             return View(users);
         }
 
-
+        [Authorize]
         [HttpGet]
         [Route("Users/{id}")]
         public async Task<IActionResult> Index_2(int id)
