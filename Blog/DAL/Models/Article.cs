@@ -14,7 +14,7 @@ namespace Blog.DAL.Models
         public User Author { get; set; }
 
         [ForeignKey("Article_Id")]
-        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
+        public ICollection<Tag> Tags { get; set; }
         public ICollection<Comment> Comments { get; set; }
     }
 }

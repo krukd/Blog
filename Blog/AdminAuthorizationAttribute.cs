@@ -11,7 +11,7 @@ namespace Blog
             var user = context.HttpContext.User;
             // Получаем роль пользователя из клайма
             var roleClaim = user.FindFirst(ClaimTypes.Role);
-            if (roleClaim == null || roleClaim.Value != "1")
+            if (roleClaim == null || roleClaim.Value != "4")
             {
                 context.Result = new ForbidResult(); // Отказываем в доступе
             }

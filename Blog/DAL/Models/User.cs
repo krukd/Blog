@@ -24,7 +24,7 @@ namespace Blog.DAL.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public int RoleId { get; set; } = 3;
+        public int RoleId { get; set; } = 6;
 
         [ForeignKey("User_Id")]
         public List<Role> Roles { get; set; } = new List<Role>();

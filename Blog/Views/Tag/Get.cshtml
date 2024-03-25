@@ -1,0 +1,42 @@
+﻿@model Blog.DAL.Models.Tag
+@{
+}
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Show tag by ID - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (Model != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Content</th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                    <tr>
+                        <td>@Model.Id</td>
+                        <td>@Model.Content</td>
+
+                        <td>
+                            <a asp-area="" asp-controller="Tag" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                        </td>
+                    </tr>
+                
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <p>No tags found!</p>
+    }
+</div>

@@ -40,14 +40,14 @@ namespace Blog.BLL.Controllers
         }
 
 
-        [Route("Login")]
+        
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        [Route("Login")]
+        
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
@@ -96,7 +96,7 @@ namespace Blog.BLL.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Route("Register")]
+       
         [HttpGet]
         public IActionResult Register()
         {
@@ -104,28 +104,21 @@ namespace Blog.BLL.Controllers
         }
 
 
-        [Route("Register")]
+        
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Register([Bind("Id,FirstName,LastName,Email,Password")] User newUser)
+        public async Task<IActionResult> Register([Bind("FirstName,LastName,Email,Password")] User newUser)
         {
+
             if (ModelState.IsValid)
             {
                 // Присвоение базовой роли "Пользователь"
-                var baseRole = await _repository.Get(3); // Получить роль "Пользователь" из репозитория
+                var baseRole = await _repository.Get(5); // Получить роль "Пользователь" из репозитория
                 newUser.Roles.Add(baseRole); // Добавить роль к пользователю
 
                 await _repo.Add(newUser);
 
-                return RedirectToAction("MyPage", "User");
-
-            }
-            foreach (var modelState in ModelState.Values)
-            {
-                foreach (var error in modelState.Errors)
-                {
-                    Console.WriteLine($"Ошибка валидации: {error.ErrorMessage}");
-                }
+                return RedirectToAction("Index", "Home");
             }
 
             // Вывод параметров модели, которые не прошли валидацию
@@ -145,58 +138,54 @@ namespace Blog.BLL.Controllers
             return View(newUser);
         }
 
-        // DELETE: User/Delete/1
+       
         [AdminAuthorization]
         [Authorize]
-        [Route("User/Delete/{id}")]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
+            // Получаем пользователя по переданному id
             var user = await _repo.Get(id);
+
+            // Если пользователь найден, удаляем его из репозитория
             if (user != null)
             {
                 await _repo.Delete(user);
+                return RedirectToAction("GetAll", "User"); 
             }
-
-            return RedirectToAction("Index", "Home");
+            else
+            {
+                // Если пользователь не найден, возвращаем ошибку
+                return NotFound();
+            }
         }
 
         [Authorize]
-        [Route("User/Update")]
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
             var user = await _repo.Get(id);
 
-            //if (user != null)
-            //{
-            //    ViewData["Email"] = user.Email;
-            //    return View(user);
-            //}
-            //else
-            //{
-            //    // Обработка случая, когда пользователь не найден
-            //    return NotFound(); // Или какая-то другая обработка ошибки
-            //}
             return View(user);
         }
 
         [Authorize]
-        [Route("User/Update")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update([Bind("Id,FirstName,LastName,Email,Password")] User user)
         {
             
             await _repo.Update(user);
-            //return RedirectToAction("Index", "Home");
-           return RedirectToAction("MyPage", "User");
+            
+           return RedirectToAction("GetAll", "User");
         }
 
 
 
         [Authorize]
-        [Route("Users")]
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
         {
             var users = await _repo.GetAll();
             return View(users);
@@ -204,8 +193,8 @@ namespace Blog.BLL.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Users/{id}")]
-        public async Task<IActionResult> Index_2(int id)
+        
+        public async Task<IActionResult> Get(int id)
         {
             var user = await _repo.Get(id);
 

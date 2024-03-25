@@ -18,16 +18,7 @@ namespace Blog.BLL.Controllers
 
         public IActionResult Index()
         {
-            //// —оздание и добавление нового пользовател€ при обращении к главной странице
-            //var newUser = new User
-            //{
-            //    //UserName = "dk", // ”кажите нужное им€ пользовател€
-            //    Email = "test@mail.ru" // ”кажите нужный email пользовател€
-
-            //};
-
-            //_context.Users.Add(newUser);
-            //_context.SaveChanges();
+           
             return View();
         }
 
