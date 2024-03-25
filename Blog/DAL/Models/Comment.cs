@@ -9,7 +9,7 @@ namespace Blog.DAL.Models
         public DateTime PostedDate { get; set; }
         public int UserId { get; set; }
 
-        public User User { get; set; }
+        public User? User { get; set; }
         public int ArticleId { get; set; }
 
     }
