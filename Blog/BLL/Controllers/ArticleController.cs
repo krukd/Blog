@@ -9,67 +9,65 @@ namespace Blog.BLL.Controllers
     {
         private readonly ILogger<ArticleController> _logger;
         private readonly IArticleRepository _repo;
+        private readonly IRepository<Tag> _tagRepo;
+        private readonly IUserRepository _userRepo;
 
 
-        public ArticleController(IArticleRepository repo, ILogger<ArticleController> logger)
+        public ArticleController(IArticleRepository article_repo, IRepository<Tag> tag_repo, IUserRepository user_repo, ILogger<ArticleController> logger)
         {
-            _repo = repo;
+            _repo = article_repo;
+            _tagRepo = tag_repo;
+            _userRepo = user_repo;
             _logger = logger;
         }
 
 
 
         [Authorize]
-        [Route("Article/Create")]
-        public async Task<IActionResult> CreateArticle()
+        [HttpGet]
+        public async Task<IActionResult> Add()
         {
+            var tags = await _tagRepo.GetAll();
+           
+            return View(new AddArticleViewModel() { Tags = tags.ToList() });
+        }
 
-            var newArticle = new Article
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Add(AddArticleViewModel model, List<int> SelectedTags)
+        {
+            // Получаем логин текущего пользователя из контекста сессии
+            string? currentUserLogin = User?.Identity?.Name;
+            var user = _userRepo.GetByLogin(currentUserLogin);
+
+            var tags = new List<Tag>();
+
+            SelectedTags.ForEach(async id => tags.Add(await _tagRepo.Get(id)));
+
+            var article = new Article
             {
-                Title = "New Article 3",
-                Content = "This is a new article content.",
+                UserId = user.Id,
+                Author = user,
                 PublishedDate = DateTime.Now,
-                UserId = 2 
+                Title = model.Title,
+                Content = model.Content,
+                Tags = tags
             };
 
-            _repo.Add(newArticle);
+            await _repo.Add(article);
 
-
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("GetAll", "Article");
         }
 
 
-        [Authorize]
-        [Route("Article/Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var article = await _repo.Get(id);
-            if (article != null)
-            {
-                await _repo.Delete(article);
-            }
 
-            return RedirectToAction("Index", "Home");
-        }
+
 
         [Authorize]
-        [Route("Article/Update/{id}")]
-        public async Task<IActionResult> Update(int id)
-        {
-            var article = await _repo.Get(id);
-            article.Title = "Article updated";
-            article.Content = "New content";
-            article.PublishedDate = DateTime.Now;
-            article.UserId = 3;
-
-            await _repo.Update(article);
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        [Authorize]
-        [Route("Articles")]
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        [ActionName("GetAll")]
+        public async Task<IActionResult> GettAll()
         {
             var articles = await _repo.GetAll();
             return View(articles);
@@ -77,17 +75,66 @@ namespace Blog.BLL.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Articles/{id}")]
-        public async Task<IActionResult> Index_2(int id)
+        public async Task<IActionResult> Edit(int id)
+        {
+            var article = await _repo.Get(id);
+            var tags = await _tagRepo.GetAll();
+           
+
+            return View(new EditArticleViewModel()
+            {
+                Id = article.Id,
+                Title = article.Title,
+                Content = article.Content,
+                TagsSelected = article.Tags.ToList(),
+                Tags = tags.ToList()
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditArticleViewModel model, List<int> SelectedTags)
+        {
+            string? currentUserLogin = User?.Identity?.Name;
+            var user = _userRepo.GetByLogin(currentUserLogin);
+
+            var tags = new List<Tag>();
+            SelectedTags.ForEach(async id => tags.Add(await _tagRepo.Get(id)));
+
+            var article = new Article
+            {
+                Id = model.Id,
+                UserId = user.Id,
+                Author = user,
+                PublishedDate = DateTime.Now,
+                Title = model.Title,
+                Content = model.Content,
+                Tags = tags
+            };
+
+            await _repo.Update(article);
+           
+            return RedirectToAction("GetAll", "Article");
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var article = await _repo.Get(id);
+            await _repo.Delete(article);
+            
+            return RedirectToAction("GetAll", "Article");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Get(int id)
         {
             var article = await _repo.Get(id);
 
             return View(article);
         }
-
-
-
-
-
     }
 }

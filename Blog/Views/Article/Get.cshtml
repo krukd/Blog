@@ -1,0 +1,49 @@
+﻿@model Blog.DAL.Models.Article
+
+@{
+}
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Show Article by ID - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (Model != null)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Published Date</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>@Model.Id</td>
+                    <td>@Model.Title</td>
+                    <td>@Model.PublishedDate</td>
+                    <td>
+                        <a asp-area="" asp-controller="Article" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    </td>
+                    <td>
+                        <form method="post" asp-controller="Article" asp-action="Delete">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <p>No articles found!</p>
+    }
+</div>
