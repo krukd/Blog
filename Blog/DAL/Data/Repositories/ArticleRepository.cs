@@ -36,8 +36,12 @@ namespace Blog.DAL.Data.Repositories
 
         public IEnumerable<Article> GetArticlesByAuthorId(int user_Id)
         {
-            var articles = Set.Include(a => a.Tags).AsEnumerable().Where(x => x.UserId == user_Id);
-            return articles.ToList();
+            //var articles = Set.Include(a => a.Tags).AsEnumerable().Where(x => x.UserId == user_Id);
+
+            var articles = Set.Include(a => a.Tags)
+                      .Where(x => x.UserId == user_Id)
+                      .ToList();
+            return articles;
         }
 
         public async Task Delete(Article item)

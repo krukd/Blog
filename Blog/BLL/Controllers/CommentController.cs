@@ -10,132 +10,107 @@ namespace Blog.BLL.Controllers
     {
         private readonly ILogger<CommentController> _logger;
         private readonly IRepository<Comment> _repo;
+        private readonly IUserRepository _userRepo;
 
-        public CommentController(IRepository<Comment> repo, ILogger<CommentController> logger)
+        public CommentController(IRepository<Comment> repo, ILogger<CommentController> logger, IUserRepository userRepo)
         {
             _repo = repo;
             _logger = logger;
+            _userRepo = userRepo;
         }
 
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var comments = await _repo.GetAll();
-
+            
             return View(comments);
         }
 
-
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetCommentById(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var comment = await _repo.Get(id);
-
+           
             return View(comment);
         }
 
-
-        //[HttpGet]
-        //public IActionResult Add()
-        //{
-
-        //    return View();
-        //}
-
-
-        //[HttpPost]
-        [Route("Comment/Add")]
-        public async Task<IActionResult> Add()
+        [Authorize]
+        [HttpGet]
+        public IActionResult Add()
         {
-            if (ModelState.IsValid)
-            {
-                var comment = new Comment
-                {
-                    Content = "HTML",
-                    PostedDate = DateTime.Now,
-                    UserId = 12,
-                    ArticleId = 1,
-                };
-
-                await _repo.Add(comment);
-
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                // Вывод параметров модели, которые не прошли валидацию
-                foreach (var key in ModelState.Keys)
-                {
-                    var state = ModelState[key];
-                    if (state.Errors.Any())
-                    {
-                        Console.WriteLine($"Параметр: {key}");
-                        foreach (var error in state.Errors)
-                        {
-                            Console.WriteLine($"  - Ошибка: {error.ErrorMessage}");
-                        }
-                    }
-                }
-                // Если модель не прошла валидацию, вернуть представление с сообщением об ошибке
-                return RedirectToAction("Index", "Home");
-            }
-
-            //// Проверка модели на валидность
-            //if (ModelState.IsValid)
-            //{
-            //    // Добавление комментария в базу данных (псевдокод)
-            //    _repo.Add(newComment);
-
-            //    // Перенаправление пользователя на другую страницу после успешного добавления
-            //    return RedirectToAction("Index", "Home");
-            //}
-            //else
-            //{
-            //    // Вывод параметров модели, которые не прошли валидацию
-            //    foreach (var key in ModelState.Keys)
-            //    {
-            //        var state = ModelState[key];
-            //        if (state.Errors.Any())
-            //        {
-            //            Console.WriteLine($"Параметр: {key}");
-            //            foreach (var error in state.Errors)
-            //            {
-            //                Console.WriteLine($"  - Ошибка: {error.ErrorMessage}");
-            //            }
-            //        }
-            //    }
-            //    // Если модель не прошла валидацию, вернуть представление с сообщением об ошибке
-            //    return View(newComment);
-            //}
+            
+            return View();
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Add(Comment newComment)
+        {
+            // Получаем логин текущего пользователя из контекста сессии
+            string? currentUserLogin = User?.Identity?.Name;
+            var user = _userRepo.GetByLogin(currentUserLogin);
 
+            var comment = new Comment
+            {               
+                PostedDate = DateTime.Now,               
+                Content = newComment.Content,             
+            };
+
+            
+            await _repo.Add(newComment);
+
+            return RedirectToAction("GetAll", "Comment");
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var role = await _repo.Get(id);
             await _repo.Delete(role);
-
-            return RedirectToAction("Index", "Comments");
+           
+            return RedirectToAction("GetAll", "Comment");
         }
 
-
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var comment = await _repo.Get(id);
-            _logger.LogInformation("CommentsController - Update");
-            return View(comment);
+            
+            return View(new EditCommentViewModel()
+            {
+                Id = comment.Id,
+                Content = comment.Content,
+                PostedDate = comment.PostedDate,
+                UserId = comment.UserId,
+                ArticleId = comment.ArticleId
+            });
         }
 
-
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> ConfirmUpdating(Comment comment)
+        public async Task<IActionResult> Edit(EditCommentViewModel editCommentViewModel)
         {
+
+            // Получаем логин текущего пользователя из контекста сессии
+            string? currentUserLogin = User?.Identity?.Name;
+            var user = _userRepo.GetByLogin(currentUserLogin);
+
+            var comment = new Comment
+            {
+                Id = editCommentViewModel.Id,
+                Content = editCommentViewModel.Content,
+                PostedDate = editCommentViewModel.PostedDate,
+                UserId = editCommentViewModel.UserId,
+                ArticleId = editCommentViewModel.ArticleId
+            };
             await _repo.Update(comment);
-            _logger.LogInformation("CommentsController - Update - complete");
-            return RedirectToAction("Index", "Comments");
+           
+            return RedirectToAction("GetAll", "Comment");
         }
 
     }

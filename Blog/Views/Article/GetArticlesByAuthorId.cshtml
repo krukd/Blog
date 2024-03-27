@@ -1,0 +1,53 @@
+﻿@model List<Blog.DAL.Models.Article>
+
+
+@{
+}
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>List of all articles by Author ID</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Published Date</th>
+                    <th>Author ID</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model)
+                {
+                    <tr>
+                        <td>@article.Id</td>
+                        <td>@article.Title</td>
+                        <td>@article.PublishedDate</td>
+                        <td>@article.UserId</td>
+                        <td>
+                            <a asp-area="" asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id">Edit</a>
+                        </td>
+                        <td>
+                            <form method="post" asp-controller="Article" asp-action="Delete">
+                                <input type="hidden" name="id" value="@article.Id" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <p>No articles found!</p>
+    }
+</div>

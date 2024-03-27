@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Blog.DAL.Models.Comment>
+
+
 @{
 }
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>List of all comments</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Content</th>
+                    <th>Posted Date</th>
+
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var comment in Model)
+                {
+                    <tr>
+                        <td>@comment.Id</td>
+                        <td>@comment.Content</td>
+                        <td>@comment.PostedDate</td>
+                        <td>
+                            <a asp-area="" asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id">Edit</a>
+                        </td>
+                        <td>
+                            <form method="post" asp-controller="Comment" asp-action="Delete">
+                                <input type="hidden" name="id" value="@comment.Id" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <p>No comments found!</p>
+    }
+</div>

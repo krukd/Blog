@@ -22,6 +22,7 @@
                     <th>Last Name</th>
                     <th>Password</th>
                     <th>Role Id</th>
+                    <th>List of Articles</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,9 @@
                         <td>@Model.LastName</td>
                         <td>@Model.Password</td>
                         <td>@Model.RoleId</td>
+                        <td>
+                        <a asp-area="" asp-controller="Article" asp-action="GetArticlesByAuthorId" asp-route-id="@Model.Id">Articles</a>
+                        </td>
                         <td>
                             <a asp-area="" asp-controller="User" asp-action="Update" asp-route-id="@Model.Id">Update</a>
                         </td>

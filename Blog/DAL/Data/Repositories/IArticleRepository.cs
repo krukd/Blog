@@ -9,5 +9,7 @@ namespace Blog.DAL.Data.Repositories
         Task<IEnumerable<Article>> GetAll();
         Task Update(Article item);
         Task Delete(Article item);
+
+        public IEnumerable<Article> GetArticlesByAuthorId(int user_Id);
     }
 }

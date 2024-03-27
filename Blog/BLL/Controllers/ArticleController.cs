@@ -136,5 +136,20 @@ namespace Blog.BLL.Controllers
 
             return View(article);
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Article/GetArticlesByAuthorId/{authorId}")]
+        public async Task<IActionResult> GetArticlesByAuthorId(int authorId)
+        {
+            _logger.LogInformation("Trying to get articles for author with ID {AuthorId}", authorId);
+            var articles = _repo.GetArticlesByAuthorId(authorId);
+
+            _logger.LogInformation("Retrieved {Count} articles for author with ID {AuthorId}", articles.Count(), authorId);
+
+            
+
+            return View(articles);
+        }
     }
 }

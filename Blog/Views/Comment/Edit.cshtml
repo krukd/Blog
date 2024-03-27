@@ -1,0 +1,61 @@
+﻿@model Blog.DAL.Models.EditCommentViewModel
+
+
+@{
+}
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Edit comment</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+
+    @if (Model != null)
+    {
+        <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Id</label>
+                <input type="text" id="id" class="form-control" asp-for="Id" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <input type="text" id="content" class="form-control" asp-for="Content" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Posted Date</label>
+                <input type="date" id="postedDate" class="form-control" asp-for="PostedDate" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">User ID</label>
+                <input type="text" id="userId" class="form-control" asp-for="UserId" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Article ID</label>
+                <input type="text" id="articleId" class="form-control" asp-for="ArticleId" readonly />
+            </div>
+            
+            <div class="mb-3">
+
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-dark">Update</button>
+
+                </div>
+
+            </div>
+
+        </form>
+    }
+    else
+    {
+        <p>Comment not found!</p>
+    }
+
+</div>
+
